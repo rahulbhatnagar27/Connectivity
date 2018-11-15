@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>User Info</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="/home/rahulbhatnagar/Documents/lib/angular.js"></script>
+    <script src="/home/rahulbhatnagar/Documents/lib/jquery.js"></script>
+    <script src="/home/rahulbhatnagar/Documents/lib/bootstrap.js"></script>
+</head>
+
+<body style="padding-right:15px;background-color: #D3D3D3;">
+    <div ng-controller="myCtrl" ng-init="init()">
+        <nav class="navbar navbar-default" style="background-color: white;margin-left:31px;margin-right:-3px;">
+
+            <div class="navbar-header"></div>
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="" style="margin-right: 8px;margin-left: 5px;margin-top:10px;">
+                        <b style="color:black;">Users</b>
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                <li>
+                    <button type="button" style="color:white;background-color:aquamarine;margin-top:20px;position:relative;left:-158px;" class="btn btn-default btn-rounded mb-4"
+                        data-toggle="modal" data-target="#modalLoginForm" ng-click="openModal();">Create User</button>
+
+                </li>
+
+
+                <li>
+                    <button class="btn btn-primary" ng-click="listView()" type="button" style="background-color: aquamarine;margin-right: 8px;margin-left: 5px;margin-top:20px;border-color:aqua;position:relative;left:-125px;">
+                        <span>
+                            <i class="fas fa-list-ul"></i>
+                        </span>
+                    </button>
+                </li>
+                <li>
+                    <button class="btn btn-primary" ng-click="gridView()" type="button" style="background-color: aquamarine;margin-right: 8px;margin-left: 5px;margin-top:20px;border-color:aqua;position:relative;left:-100px;">
+                        <span>
+                            <i class="fas fa-th"></i>
+                        </span>
+                    </button>
+                </li>
+                <li>
+                    <a href="index.html">
+                        <button class="btn btn-primary" type="button" style="background-color: aquamarine;margin-right: 8px;margin-left: 5px;margin-top:4px;border-color:aqua;position:relative;left:-90px;">
+                            <span>
+                                <i class="fas fa-sync-alt"></i>
+                            </span>
+                        </button>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        <div id="modal-form.html">
+            <div class="row" class="col-md-12">
+                <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header text-left" style="color:bisque;background-color:cornflowerblue;">
+                                <h4 class="modal-title w-100 font-weight-bold">
+                                    <label ng-show="makingUser" ng-init="makingUser=true">User Details</label>
+                                    <label ng-show="!makingUser">Update Details</label>
+                                </h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">x</span>
+                                </button>
+                            </div>
+                            <div>
+                                <form class="form-horizontal" name="myForm" novalidate>
+                                    <div class="modal-body mx-3">
+                                        <label>UserName:
+                                            <input type="text" class="form-control" placeholder="Enter name..." name="name" ng-model="userObj.name" minlength="5" maxlength="50"
+                                                style="width:567px;" required />
+                                            <span class="text-red" ng-show="myForm.name.$error.maxlength">
+                                                Name Should Not Be Greater Then 50 Characters</span>
+                                            <span class="text-red" ng-show="myForm.name.$error.minlength">
+                                                Name Should Be Greater Then 5 Characters</span>
+                                            <span class="text-red" ng-show="myForm.name.$touched && myForm.name.$error.required">Name is required....</span>
+                                        </label>
+                                        <label style="margin-left:0px;width:581px;">Password:
+                                            <input type="password" class="form-control" placeholder="Enter password..." name="pass" ng-model="userObj.pass" minlength="5"
+                                                maxlength="50" required />
+                                            <span class="text-red" ng-show="myForm.pass.$error.maxlength">
+                                                Password Should Not Be Greater Then 50 Characters</span>
+                                            <span class="text-red" ng-show="myForm.pass.$error.minlength">
+                                                Password Should Be Greater Then 5 Characters</span>
+                                            <span class="text-red" ng-show="myForm.pass.$touched && myForm.pass.$error.required">Password is required....</span>
+                                        </label>
+                                        <label style="width:581px;">Contact:
+                                            <input type="number" class="form-control" placeholder="Enter Phoneno..." name="phone" ng-model="userObj.phone" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                maxlength="10" required />
+                                            <span class="text-red" ng-show="myForm.phone.$touched && myForm.phone.$error.required">Phoneno. is required....</span>
+                                        </label>
+                                        <label style="width:581px;">Email:
+                                            <input type="email" name="email" class="form-control" placeholder="Enter email..." ng-model="userObj.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                                                required />
+                                            <span class="error" ng-show="myForm.email.$error.required"></span>
+                                            <span class="error" ng-show="myForm.email.$error.email">Not valid email!</span>
+                                            <span class="text-red" ng-show="myForm.email.$touched && myForm.email.$error.required">Email is required....</span>
+                                        </label>
+                                        <label style="width:581px;">Department:
+                                            <input type="text" name="department" placeholder="Enter department..." class="form-control" ng-model="userObj.department"
+                                                ng-minlength="5" ng-maxlength="50" required />
+                                            <span class="text-red" ng-show="myForm.department.$error.maxlength">
+                                                Department Should Not Be Greater Then 50 Characters
+                                            </span>
+                                            <span class="text-red" ng-show="myForm.department.$error.minlength">
+                                                Department Should Be Greater Then 5 Characters</span>
+                                            <span class="text-red" ng-show="myForm.department.$touched && myForm.department.$error.required">Department is required....</span>
+                                        </label>
+                                        <label style="width:581px;">Location:
+                                            <textarea type="textarea" class="form-control" placeholder="Enter location..." name="location" ng-model="userObj.location"
+                                                ng-minlength="5" ng-maxlength="50" required></textarea>
+                                            <span class="text-red" ng-show="myForm.location.$error.maxlength">
+                                                Location Should Not Be Greater Then 50 Characters</span>
+                                            <span class="text-red" ng-show="myForm.location.$error.minlength">
+                                                Location Should Be Greater Then 5 Characters</span>
+                                            <span class="text-red" ng-show="myForm.location.$touched && myForm.location.$error.required">Location is required....</span>
+                                        </label>
+                                    </div>
+                                    <span class="modal-footer d-flex justify-content-center">
+                                        <span style="float:right;position:relative;left:-30px;">
+                                            <button type="button" ng-show="updatinguser" ng-init="updatinguser=true" id="bulb" class="btn btn-sm btn-primary" data-dismiss="modal"
+                                                aria-label="Close" ng-click="createUser()" ng-disabled="myForm.$invalid">
+                                                <span aria-hidden="true">Save</span>
+                                            </button>
+                                            <button type="button" ng-show="!updatinguser" ng-click="updateUser(data)" class="btn btn-sm btn-primary" data-dismiss="modal"
+                                                id="yourButtonId" aria-label="Close" data-toggle="modal" data-target="#myModal">
+                                                <span aria-hidden="true">Update</span>
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#myModal1">
+                                                <span aria-hidden="true" style="width:54px;height:30px;">
+                                                    <p style="height: 6px;padding-left: -1px;top: -2px;left: -5px;position: relative;width: 35px;">Cancel</p>
+                                                </span>
+                                            </button>
+                                        </span>
+                                    </span>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Update Details</h4>
+                        </div>
+                        <div class="modal-body">
+                          <p>Are you sure want want to update!</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Yes</button>
+                          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+           
+                </div>
+                <!-- <div class="modal fade" class="myModal1" role="dialog">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h4 class="modal-title">Delete Details</h4>
+                        </div>
+                        <div class="modal-body">
+                          <p>Are you sure you want to Delete!</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Yes</button>
+                          <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                 -->
+                
+                <h2 style="margin-left:56px;">User Details</h2>
+                <div ng-if="showgridView">
+
+                    <div class="col-lg-4 shadow-lg p-3 mb-5 bg-white rounded" ng-repeat="data in userData" style="left:12px;margin-right:-5px;">
+                        <div class="panel panel-default" style="border:0;margin-left:20px;">
+                            <div class="panel-heading">
+                                <b style="color:royalblue;">Name</b>: {{data.name|userDataFormat}}
+                                <span style=float:right;>
+                                    <button type="button" class="btn btn-default" ng-click="route()" style="margin-top:-6px;">
+                                        <i class="fas fa-info"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="updateData($index,data)" style="margin-top:-7px;">Update</button>
+                                    <button type="button" class="btn btn-default" ng-click="deleteData(data)" style="margin-top: -7px;">Delete</button>
+                                </span>
+                            </div>
+                            <div class="panel-body" style="color:darkcyan;background-color:white; ">
+
+                                <label>
+                                    <b style="color:burlywood;">Password</b>: {{data.pass}}</label>
+                                <br/>
+                                <label>
+                                    <b style="color:cadetblue;">Phoneno</b>: {{data.phone}}</label>
+                                <br/>
+                                <label>
+                                    <b style="color:cornflowerblue;">Email</b>: {{data.email}}</label>
+                                <br/>
+                                <label>
+                                    <b style="color:aquamarine;">Department</b>: {{data.department|userDataFormat}}</label>
+                                <br/>
+                                <label>
+                                    <b style="color:blanchedalmond;">Location</b>: {{data.location|userDataFormat}}</label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="showlistView">
+
+                    <div style="background-color: lightgrey;padding-top:0px;padding-left:44px;">
+                        <p the table shown with some css styles>
+                            <table width=100% style="border-color:cadetblue;background:cadetblue; border: 1px solid grey;
+                        border-collapse: collapse;">
+                                <tr>
+                                    <th style="background-color: teal;color:azure">SrNo</th>
+                                    <th style="background-color: teal;color:azure">UserName</th>
+                                    <th style="background-color: teal;color:azure">Password</th>
+                                    <th style="background-color: teal;color:azure">Contact</th>
+                                    <th style="background-color: teal;color:azure">Email</th>
+                                    <th style="background-color: teal;color:azure">Department</th>
+                                    <th style="background-color: teal;color:azure">Location</th>
+
+                                </tr>
+                                <th>
+                                    <tr ng-repeat="data in userData">
+                                        <td>{{$index + 1}}</td>
+                                        <td>{{data.name|userDataFormat}}</td>
+                                        <td>{{data.pass}}</td>
+                                        <td>{{data.phone}}</td>
+                                        <td>{{data.email}}</td>
+
+                                        <td>{{data.department|userDataFormat}}</td>
+
+                                        <td>{{data.location|userDataFormat}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-default" ng-click="updateData($index,data)" style="margin-top:-7px;">Update</button>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-default" ng-click="deleteData(data)" style="margin-top: -7px;">Delete</button>
+                                        </td>
+                                    </tr>
+                            </table>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <button type = "button" ng-model="user" ng-click="check()">Click</button>
+<div ng-if="user">
+    <p>Ankit</p>
+</div>
+    <button type="button" ng-model="bulb" ng-click="show()">Onclick</button>
+<div ng-if="bulb">
+    <p>Rahul</p>
+</div> -->
+        <script src="/home/rahulbhatnagar/Workspace/MAIN/Module/Users/controller.js"></script>
+        <script src="/home/rahulbhatnagar/Workspace/MAIN/Module/Users/service.js"></script>
+        <script src="/home/rahulbhatnagar/Workspace/MAIN/Module/Users/filter.js"></script>
+
+</body>
+
+</html>
